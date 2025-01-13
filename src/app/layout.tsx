@@ -30,13 +30,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ABCmovies',
     type: 'website',
-    url: '',
+    url: process.env.NEXT_PUBLIC_FRONTEND_URL!,
     description: 'Browse the biggest movie database online!',
     siteName: 'ABCmovies',
     images: [
       {
         url: `${process.env
-          .NEXT_PUBLIC_IMAGES_URL!}/w300/k24eZq5I3jyz4htPkZCRpnUmBzE.jpg`,
+          .NEXT_PUBLIC_IMAGES_URL!}/w500/k24eZq5I3jyz4htPkZCRpnUmBzE.jpg`,
       },
     ],
   },
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: `${process.env
-          .NEXT_PUBLIC_IMAGES_URL!}/w300/k24eZq5I3jyz4htPkZCRpnUmBzE.jpg`,
+          .NEXT_PUBLIC_IMAGES_URL!}/w500/k24eZq5I3jyz4htPkZCRpnUmBzE.jpg`,
       },
     ],
   },

@@ -89,13 +89,12 @@ const MoviesRow: FC<Props> = ({ categoryId, categoryName }) => {
         {categoryName}
       </h2>
       <div className='relative'>
-        {mustShowMovies === true ||
-          (mustShowLoadingSkeleton === true && (
-            <>
-              <div className='absolute top-0 left-0 sm:w-10 w-3 h-full bg-gradient-to-r from-base-100 to-transparent z-10' />
-              <div className='absolute top-0 right-0 sm:w-10 w-3 h-full bg-gradient-to-l from-base-100 to-transparent z-10' />
-            </>
-          ))}
+        {(mustShowMovies === true || mustShowLoadingSkeleton === true) && (
+          <>
+            <div className='absolute top-0 left-0 sm:w-10 w-3 h-full bg-gradient-to-r from-base-100 to-transparent z-100' />
+            <div className='absolute top-0 right-0 sm:w-10 w-3 h-full bg-gradient-to-l from-base-100 to-transparent z-100' />
+          </>
+        )}
         <ul className='flex flex-row flex-nowrap gap-8 justify-start items-stretch overflow-x-scroll'>
           <AnimatePresence mode='popLayout'>
             {mustShowMovies &&
@@ -117,6 +116,11 @@ const MoviesRow: FC<Props> = ({ categoryId, categoryName }) => {
                 />
               );
             })}
+          {mustShowMovies === false && mustShowLoadingSkeleton === false && (
+            <span className='w-full text-start'>
+              There are no movies in this category yet
+            </span>
+          )}
           <li
             ref={reachForNextPageElementRef}
             key={'reach-for-next-page-element'}

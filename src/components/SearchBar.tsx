@@ -18,7 +18,7 @@ const SearchBar: FC<Props> = ({ placeholder = 'Search' }) => {
 
     if (query) {
       const encodedQuery = encodeURIComponent(query);
-      router.replace(`/movies?query=${encodedQuery}`);
+      router.replace(`/movies?query=${encodedQuery}#title`);
     }
   };
 

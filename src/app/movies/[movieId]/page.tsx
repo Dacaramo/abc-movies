@@ -54,10 +54,10 @@ export const generateMetadata = async (
     openGraph: {
       title: `ABCmovies | ${movie.title}`,
       description: movie.overview ?? 'Missing movie description',
-      url: '',
+      url: `${process.env.NEXT_PUBLIC_FRONTEND_URL!}/movies/${movieId}`,
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_IMAGES_URL!}/w300${
+          url: `${process.env.NEXT_PUBLIC_IMAGES_URL!}/w500${
             movie.poster_path
           }`,
         },
@@ -68,7 +68,7 @@ export const generateMetadata = async (
       card: 'summary_large_image',
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_IMAGES_URL!}/w300${
+          url: `${process.env.NEXT_PUBLIC_IMAGES_URL!}/w500${
             movie.poster_path
           }`,
         },

@@ -36,7 +36,7 @@ const MovieCard: FC<Props> = ({ movie }) => {
   return (
     <motion.li
       layout
-      className='min-w-[250px] w-[250px] bg-base-200 rounded-lg'
+      className='min-w-[250px] bg-base-200 rounded-lg'
       initial={{ scale: 0.9, opacity: 0 }}
       whileInView={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.9, opacity: 0 }}
@@ -46,13 +46,15 @@ const MovieCard: FC<Props> = ({ movie }) => {
         href={`/movies/${movie.id}#title`}
         className='flex flex-col justify-center items-center text-center'
       >
-        <Image
-          width={300}
-          height={300}
-          className='rounded-t-lg aspect-square object-contain bg-black flex justify-center items-center'
-          src={`${process.env.NEXT_PUBLIC_IMAGES_URL}/w300${movie.poster_path}`}
-          alt={`${movie.title}🎞️`}
-        />
+        <div className='w-full bg-black rounded-t-lg flex justify-center items-center'>
+          <Image
+            width={300}
+            height={300}
+            className='rounded-t-lg aspect-square object-contain bg-black flex justify-center items-center'
+            src={`${process.env.NEXT_PUBLIC_IMAGES_URL}/w300${movie.poster_path}`}
+            alt={`${movie.title}🎞️`}
+          />
+        </div>
         <div className='w-full flex flex-col gap-2 p-4'>
           <span className='font-bold'>{movie.title}</span>
           <span className='opacity-50'>

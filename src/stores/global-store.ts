@@ -3,7 +3,7 @@ import { DetailedMovie, SuperficialMovie } from '@/model/Movie';
 
 export const getInitialGlobalStoreState = (): GlobalStoreState => {
   return {
-    favorites: JSON.parse(localStorage.getItem('favorites') ?? '[]'),
+    favorites: [],
   };
 };
 
@@ -14,6 +14,7 @@ type GlobalStoreState = {
 type GlobalStoreActions = {
   addFavorite: (movie: SuperficialMovie | DetailedMovie) => void;
   removeFavorite: (movieId: number) => void;
+  setFavorites: (favorites: Array<SuperficialMovie | DetailedMovie>) => void;
 };
 
 export type GlobalStore = GlobalStoreState & GlobalStoreActions;
@@ -25,7 +26,6 @@ export const createGlobalStore = (initialState: GlobalStoreState) => {
       addFavorite: (movie: SuperficialMovie | DetailedMovie) => {
         return set((state) => {
           const newFavorites = [...state.favorites, movie];
-          localStorage.setItem('favorites', JSON.stringify(newFavorites));
           return {
             favorites: newFavorites,
           };
@@ -36,9 +36,15 @@ export const createGlobalStore = (initialState: GlobalStoreState) => {
           const newFavorites = state.favorites.filter(({ id }) => {
             return id !== movieId;
           });
-          localStorage.setItem('favorites', JSON.stringify(newFavorites));
           return {
             favorites: newFavorites,
+          };
+        });
+      },
+      setFavorites: (favorites: Array<SuperficialMovie | DetailedMovie>) => {
+        return set((_) => {
+          return {
+            favorites,
           };
         });
       },

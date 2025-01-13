@@ -3,21 +3,20 @@
 import { getMovies } from '@/axiosClient';
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
-// import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import MovieCard from './MovieCard';
 
-const MoviesGrid = () => {
+const ComponentNeedingSuspense = () => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState<number | null>(null);
-  // const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
-  // const { query } = Object.fromEntries(searchParams.entries()) as {
-  //   query?: string;
-  // };
+  const { query } = Object.fromEntries(searchParams.entries()) as {
+    query?: string;
+  };
 
-  const query = 'hola';
   const {
     data: paginatedResponse,
     isFetching,
@@ -43,8 +42,6 @@ const MoviesGrid = () => {
     isFetched &&
     paginatedResponse?.results !== undefined &&
     paginatedResponse?.results.length > 0;
-
-  console.log('@@@@@paginatedResponse', paginatedResponse);
 
   useEffect(() => {
     if (paginatedResponse) {
@@ -104,6 +101,14 @@ const MoviesGrid = () => {
         />
       )}
     </div>
+  );
+};
+
+const MoviesGrid = () => {
+  return (
+    <Suspense>
+      <ComponentNeedingSuspense />
+    </Suspense>
   );
 };
 

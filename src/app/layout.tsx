@@ -5,7 +5,8 @@ import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
 import SearchBar from '@/components/SearchBar';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import ProvidersWrapper from '@/components/ProvidersWrapper';
+import EntryPointWrapper from '@/components/EntryPointWrapper';
+import { GlobalStoreProvider } from '@/components/GlobalStoreProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -60,23 +61,25 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} w-full flex flex-col justify-center items-center`}
       >
-        <ProvidersWrapper>
-          <header className='w-full flex flex-col justify-center items-center'>
-            <Nav />
-            <div className='min-h-[45vh] w-full'>
-              <Hero />
-            </div>
-          </header>
-          <main className='w-full flex md:flex-row flex-col justify-start items-stretch bg-base-100'>
-            <div className='md:w-[250px] w-full bg-base-200 p-4'>
-              <SearchBar placeholder='Search' />
-            </div>
-            <div className='flex-1 px-8 py-4 flex flex-col gap-8 overflow-x-hidden'>
-              {children}
-            </div>
-          </main>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </ProvidersWrapper>
+        <GlobalStoreProvider>
+          <EntryPointWrapper>
+            <header className='w-full flex flex-col justify-center items-center'>
+              <Nav />
+              <div className='min-h-[45vh] w-full'>
+                <Hero />
+              </div>
+            </header>
+            <main className='w-full flex md:flex-row flex-col justify-start items-stretch bg-base-100'>
+              <div className='md:w-[250px] w-full bg-base-200 p-4'>
+                <SearchBar placeholder='Search' />
+              </div>
+              <div className='flex-1 px-8 py-4 flex flex-col gap-8 overflow-x-hidden'>
+                {children}
+              </div>
+            </main>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </EntryPointWrapper>
+        </GlobalStoreProvider>
       </body>
     </html>
   );

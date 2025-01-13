@@ -5,11 +5,10 @@ import { DetailedMovie } from '@/model/Movie';
 import { Metadata, ResolvingMetadata } from 'next';
 import Image from 'next/image';
 import { FC } from 'react';
-
 interface Props {
-  params: {
+  params: Promise<{
     movieId: number;
-  };
+  }>;
 }
 
 const getSingleMovie = async (movieId: number) => {
@@ -34,10 +33,11 @@ const getSingleMovie = async (movieId: number) => {
 };
 
 export const generateMetadata = async (
-  { params: { movieId } }: Props,
+  { params }: Props,
   parentMetadataPromise: ResolvingMetadata
 ): Promise<Metadata> => {
   const metadata = (await parentMetadataPromise) as Metadata;
+  const { movieId } = await params;
   const movie = await getSingleMovie(movieId);
 
   return {
@@ -77,7 +77,8 @@ export const generateMetadata = async (
   };
 };
 
-const MoviePage: FC<Props> = async ({ params: { movieId } }) => {
+const MoviePage: FC<Props> = async ({ params }) => {
+  const { movieId } = await params;
   const movie = await getSingleMovie(movieId);
 
   return (

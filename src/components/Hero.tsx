@@ -59,7 +59,7 @@ const Hero = () => {
   }, [queryResult.data]);
 
   if (!currentMovie) {
-    return <div>Loading...</div>;
+    return <div className='skeleton w-full min-h-[45vh]' />;
   }
 
   return (

@@ -1,29 +1,101 @@
 'use client';
 
-import { useState, ChangeEvent } from 'react';
-import SearchBar from './SearchBar';
-import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { getMovies } from '@/axiosClient';
+import { useQuery } from '@tanstack/react-query';
+import { AnimatePresence } from 'framer-motion';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import ReactPaginate from 'react-paginate';
+import MovieCard from './MovieCard';
 
-const MoviesGrid = ({}) => {
-  const [search, setSearch] = useState('');
+const MoviesGrid = () => {
+  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // const delay = 300;
-  // const debouncedSearch = useDebouncedValue(search, 300);
-
-  const handleChangeOnSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+  const { query } = Object.fromEntries(searchParams.entries()) as {
+    query?: string;
   };
 
+  const {
+    data: paginatedResponse,
+    isFetching,
+    isFetched,
+  } = useQuery({
+    queryKey: ['getMovies', query, page],
+    enabled: query !== undefined,
+    queryFn: async () => {
+      return await getMovies({ page }, query!);
+    },
+    staleTime: Infinity,
+    gcTime: 1800000,
+  });
+
+  const handleClickOnPage = (e: { selected: number }) => {
+    router.replace('#title');
+    setPage(e.selected);
+  };
+
+  const mustShowLoadingSkeleton =
+    isFetching && paginatedResponse?.results === undefined;
+  const mustShowMovies =
+    isFetched &&
+    paginatedResponse?.results !== undefined &&
+    paginatedResponse?.results.length > 0;
+
   return (
-    <>
-      <div className='flex flex-col gap-2 items-start bg-base-200'>
-        <SearchBar
-          value={search}
-          onChange={handleChangeOnSearch}
+    <div className='flex flex-col gap-8'>
+      <h2
+        id='title'
+        className='text-3xl sm:text-start text-center font-bold'
+      >
+        {paginatedResponse
+          ? `Showing ${paginatedResponse.total_results} results matching "${query}"`
+          : `Showing results matching ${query}`}
+      </h2>
+      <ul className='h-full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8'>
+        <AnimatePresence mode='popLayout'>
+          {mustShowMovies &&
+            paginatedResponse.results.map((movie) => {
+              return (
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                />
+              );
+            })}
+        </AnimatePresence>
+        {mustShowLoadingSkeleton &&
+          [...new Array(25)].map((_, i) => {
+            return (
+              <li
+                key={i}
+                className='skeleton h-[452px] min-w-[250px]'
+              />
+            );
+          })}
+      </ul>
+      {paginatedResponse && (
+        <ReactPaginate
+          className='flex flex-row gap-1 justify-center mt-[25px] mb-[50px]'
+          previousLinkClassName={'btn btn-sm btn-ghost p-1 font-normal'}
+          pageLinkClassName={'btn btn-sm min-w-[20px] p-1'}
+          nextLinkClassName={'btn btn-sm btn-ghost p-1 font-normal'}
+          activeLinkClassName={'btn btn-sm btn-primary '}
+          breakClassName='font-nunito text-lg'
+          previousLabel={'Prev'}
+          breakLabel='...'
+          nextLabel={'Next'}
+          onPageChange={handleClickOnPage}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={1}
+          forcePage={page}
+          initialPage={1}
+          pageCount={paginatedResponse.total_pages}
+          renderOnZeroPageCount={null}
         />
-      </div>
-      <div className='bg-base-100'></div>
-    </>
+      )}
+    </div>
   );
 };
 

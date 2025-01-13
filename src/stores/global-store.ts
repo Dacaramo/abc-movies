@@ -26,7 +26,6 @@ export const createGlobalStore = (initialState: GlobalStoreState) => {
         return set((state) => {
           const newFavorites = [...state.favorites, movie];
           localStorage.setItem('favorites', JSON.stringify(newFavorites));
-          console.log('ADDED TO LOCAL STORAGE');
           return {
             favorites: newFavorites,
           };
@@ -38,7 +37,6 @@ export const createGlobalStore = (initialState: GlobalStoreState) => {
             return id !== movieId;
           });
           localStorage.setItem('favorites', JSON.stringify(newFavorites));
-          console.log('REMOVED FROM LOCAL STORAGE');
           return {
             favorites: newFavorites,
           };

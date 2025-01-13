@@ -3,15 +3,15 @@
 import { getMovies } from '@/axiosClient';
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import MovieCard from './MovieCard';
 
 const MoviesGrid = () => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState<number | null>(null);
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const { query } = Object.fromEntries(searchParams.entries()) as {
     query?: string;
@@ -25,14 +25,14 @@ const MoviesGrid = () => {
     queryKey: ['getMovies', query, page],
     enabled: query !== undefined,
     queryFn: async () => {
-      return await getMovies({ page }, query!);
+      return await getMovies({ page: page + 1 }, query!);
     },
     staleTime: Infinity,
     gcTime: 1800000,
   });
 
   const handleClickOnPage = (e: { selected: number }) => {
-    router.replace('#title');
+    document.documentElement.scrollTop = 0;
     setPage(e.selected);
   };
 
@@ -42,6 +42,14 @@ const MoviesGrid = () => {
     isFetched &&
     paginatedResponse?.results !== undefined &&
     paginatedResponse?.results.length > 0;
+
+  console.log('@@@@@paginatedResponse', paginatedResponse);
+
+  useEffect(() => {
+    if (paginatedResponse) {
+      setTotalPages(paginatedResponse.total_pages);
+    }
+  }, [paginatedResponse]);
 
   return (
     <div className='flex flex-col gap-8'>
@@ -75,7 +83,7 @@ const MoviesGrid = () => {
             );
           })}
       </ul>
-      {paginatedResponse && (
+      {totalPages && totalPages > 0 && (
         <ReactPaginate
           className='flex flex-row gap-1 justify-center mt-[25px] mb-[50px]'
           previousLinkClassName={'btn btn-sm btn-ghost p-1 font-normal'}
@@ -90,8 +98,7 @@ const MoviesGrid = () => {
           pageRangeDisplayed={3}
           marginPagesDisplayed={1}
           forcePage={page}
-          initialPage={1}
-          pageCount={paginatedResponse.total_pages}
+          pageCount={totalPages}
           renderOnZeroPageCount={null}
         />
       )}

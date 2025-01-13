@@ -32,7 +32,7 @@ const MovieCastCard: FC<Props> = ({ movieId }) => {
     shortenedCastList.length > 0;
 
   return (
-    <div className='flex-1 flex flex-col justify-evenly gap-4 rounded-lg bg-base-200 p-4'>
+    <div className='min-h-[400px] flex-1 flex flex-col justify-evenly gap-4 rounded-lg bg-base-200 p-4'>
       <h3 className='text-center font-bold text-xl'>Cast</h3>
       {mustShowCastList && (
         <ul className='w-full flex flex-row flex-wrap justify-center items-center gap-4'>

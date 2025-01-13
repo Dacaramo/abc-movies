@@ -24,14 +24,11 @@ const MovieCard: FC<Props> = ({ movie }) => {
   const isAlreadyInFavorites = useIsAlreadyInFavorites(movie.id);
 
   const handleClickOnHeartButton = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log('HANDLER ACCESSED');
     e.preventDefault();
 
     if (isAlreadyInFavorites) {
-      console.log('IS ALREADY IN FAVORITES');
       removeFavorite(movie.id);
     } else {
-      console.log('IS NOT ALREADY IN FAVORITES');
       addFavorite(movie);
     }
   };

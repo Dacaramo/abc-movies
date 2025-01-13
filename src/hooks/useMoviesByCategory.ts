@@ -31,7 +31,6 @@ export const useMoviesByCategory = (categoryId: MovieCategory) => {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      console.log('INSIDE GET NEXT PAGE PARAM');
       return lastPage.page < lastPage.total_pages
         ? lastPage.page + 1
         : undefined;

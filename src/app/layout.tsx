@@ -63,7 +63,9 @@ export default function RootLayout({
         <ProvidersWrapper>
           <header className='w-full flex flex-col justify-center items-center'>
             <Nav />
-            <Hero />
+            <div className='min-h-[45vh] w-full'>
+              <Hero />
+            </div>
           </header>
           <main className='w-full flex md:flex-row flex-col justify-start items-stretch bg-base-100'>
             <div className='md:w-[250px] w-full bg-base-200 p-4'>

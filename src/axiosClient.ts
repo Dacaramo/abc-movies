@@ -15,7 +15,6 @@ export const getMovies = async (
   qsp: QueryStringParams,
   search: string
 ): Promise<PaginatedResponse<SuperficialMovie>> => {
-  console.log('EJECUTANDO');
   const { data } = await axiosClient.get<PaginatedResponse<SuperficialMovie>>(
     `/search/movie`,
     {
